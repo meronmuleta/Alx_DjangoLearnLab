@@ -1,8 +1,7 @@
  command:
 
  from bookshelf.models import Book
- books =  Book.objects.all()
- print(books)
+ Book.objects.get(id=1)
 
  output:
 
