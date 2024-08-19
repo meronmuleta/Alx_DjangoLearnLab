@@ -1,18 +1,17 @@
-from library.models import Book
-books = Book.objects.select_related("author")
-for book in books:
-    print(f"Title: {book.title}, Author: {book.author.name}")
 
-from library.models import Library
-libraries = Library.objects.prefetch_related('books')
-for library in libraries:
-      print(f"Library: {library.name}")
-      books_in_library = library.books.all()
-      for book in books_in_library:
-          print(f" - {book.title}")
+from .models import Author, Book, Library, Librarian
 
+def query_books_by_author(author_name):
+    author = Author.objects.get(name=author_name)
+    books = Book.objects.filter(author=author)
+    return books
 
-from library.models import Librarian
-librarians = Librarian.objects.select_related('library')
-for librarian in librarians:
-    print(f"Librarian: {librarian.name}, Library: {librarian.library.name}")
+def list_books_in_library(library_name):
+    library = Library.objects.get(name=library_name)
+    books = library.books.all()
+    return books
+
+def retrieve_librarian_for_library(library_name):
+    library = Library.objects.get(name=library_name)
+    librarian = Librarian.objects.get(library=library)
+    return librarian
