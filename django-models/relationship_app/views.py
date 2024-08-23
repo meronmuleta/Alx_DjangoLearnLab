@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .models import Book
 from .models import Library
 from typing import Any
-from django.views.generic import DetailView
+from django.views.generic.detail import DetailView
 
 def BookList(request):
     list_books= Book.objects.all()
