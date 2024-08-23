@@ -5,7 +5,7 @@ from .models import Library
 from typing import Any
 from django.views.generic.detail import DetailView
 
-def BookList(request):
+def list_books(request):
     list_books= Book.objects.all()
     context = {'books':list_books}
     return render(request,'relationship_app/list_books.html',context)
