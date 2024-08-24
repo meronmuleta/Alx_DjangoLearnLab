@@ -16,6 +16,10 @@ class register(CreateView):
     success_url = reverse_lazy('login')
     template_name = "relationship_app/register.html"
 
+    def get_form(self, form_class=None):
+        form = UserCreationForm()
+        return super().get_form(form_class or form)
+
 
 
 def list_books(request):
