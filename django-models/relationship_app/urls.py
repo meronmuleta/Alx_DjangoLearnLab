@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from .views import list_books
 from .views import SignUpView, Login, Logout
-from .views import AdminView, LibrarianView, MemberView
+from .views import Admin, Librarian, Member
 
 urlpatterns = [
     path('views/',list_books),
@@ -10,8 +10,8 @@ urlpatterns = [
     path('register/', views.register.as_view(), name="register"),
     path('login/', LoginView.as_view(template_name='relationship_app/login.html'), name="login"),
     path('logout/',LogoutView.as_view(template_name='relationship_app/logout.html'), name="logout"),
-    path('admin/', AdminView, name='Admin'),
-    path('librarian/', LibrarianView, name='Librarian'),
-    path('member/', MemberView, name='Member'),
+    path('admin/', Admin, name='Admin'),
+    path('librarian/', Librarian, name='Librarian'),
+    path('member/', Member, name='Member'),
 
     ]
