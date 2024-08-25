@@ -11,6 +11,9 @@ from django.shortcuts import render
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden
+from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.views.generic import CreateView, UpdateView, DeleteView
+from .models import Book
 
 class register(CreateView):
     form_class = UserCreationForm
@@ -64,3 +67,26 @@ def librarian_view(request):
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
 
+
+
+class BookCreateView(PermissionRequiredMixin, CreateView):
+    model = Book
+    fields = ['title', 'author']
+    template_name = 'relationship_app/book_form.html'
+    success_url = reverse_lazy('BookList')
+    permission_required = 'relationship_app.can_add_book'
+
+
+class BookUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Book
+    fields = ['title', 'author']
+    template_name = 'relationship_app/book_form.html'
+    success_url = reverse_lazy('BookList')
+    permission_required = 'relationship_app.can_change_book'
+
+
+class BookDeleteView(PermissionRequiredMixin, DeleteView):
+    model = Book
+    template_name = 'relationship_app/book_confirm_delete.html'
+    success_url = reverse_lazy('BookList')
+    permission_required = 'relationship_app.can_delete_book'
