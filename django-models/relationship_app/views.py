@@ -7,13 +7,17 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseForbidden
-from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.views.generic import CreateView, UpdateView, DeleteView
 from .models import Book
+from django.contrib.auth.decorators import permission_required
+from django import forms
+
+
+
 
 class register(CreateView):
     form_class = UserCreationForm
@@ -69,24 +73,39 @@ def member_view(request):
 
 
 
-class BookCreateView(PermissionRequiredMixin, CreateView):
-    model = Book
-    fields = ['title', 'author']
-    template_name = 'relationship_app/book_form.html'
-    success_url = reverse_lazy('BookList')
-    permission_required = 'relationship_app.can_add_book'
+class BookForm(forms.ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'author']
 
+@permission_required('relationship_app.can_add_book')
+def book_create(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('BookList')
+    else:
+        form = BookForm()
+    return render(request, 'relationship_app/book_form.html', {'form': form})
 
-class BookUpdateView(PermissionRequiredMixin, UpdateView):
-    model = Book
-    fields = ['title', 'author']
-    template_name = 'relationship_app/book_form.html'
-    success_url = reverse_lazy('BookList')
-    permission_required = 'relationship_app.can_change_book'
+@permission_required('relationship_app.can_change_book')
+def book_update(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        form = BookForm(request.POST, instance=book)
+        if form.is_valid():
+            form.save()
+            return redirect('BookList')
+    else:
+        form = BookForm(instance=book)
+    return render(request, 'relationship_app/book_form.html', {'form': form})
 
+@permission_required('relationship_app.can_delete_book')
+def book_delete(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('BookList')
+    return render(request, 'relationship_app/book_confirm_delete.html', {'book': book})
 
-class BookDeleteView(PermissionRequiredMixin, DeleteView):
-    model = Book
-    template_name = 'relationship_app/book_confirm_delete.html'
-    success_url = reverse_lazy('BookList')
-    permission_required = 'relationship_app.can_delete_book'
