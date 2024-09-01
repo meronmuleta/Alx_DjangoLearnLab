@@ -2,10 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.http import HttpResponse
-from .forms import BookForm
+from .forms import ExampleForm
 from .models import Book
 
-class BookForm(forms.ModelForm):
+class ExampleForm(forms.ModelForm):
     class Meta:
         model = Book
         fields = ['title', 'author', 'publication_year']
@@ -22,13 +22,13 @@ def book_list(request):
 @permission_required('books.can_create', raise_exception=True)
 def create_book(request):
     if request.method == 'POST':
-        form = BookForm(request.POST)
+        form = ExampleForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "Book created successfully.")
             return redirect('create_book')
     else:
-        form = BookForm()
+        form = ExampleForm()
     return render(request, 'bookshelf/create_book.html', {'form': form})
 
 # View to edit a book, requires 'can_edit' permission
@@ -37,13 +37,13 @@ def create_book(request):
 def edit_book(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
+        form = ExampleForm(request.POST, instance=book)
         if form.is_valid():
             form.save()
             messages.success(request, "Book updated successfully.")
             return redirect('edit_book', book_id=book_id)
     else:
-        form = BookForm(instance=book)
+        form = ExampleForm(instance=book)
     return render(request, 'bookshelf/edit_book.html', {'form': form, 'book': book})
 
 # View to delete a book, requires 'can_delete' permission
