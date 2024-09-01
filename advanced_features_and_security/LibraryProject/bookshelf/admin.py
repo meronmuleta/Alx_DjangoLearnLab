@@ -23,7 +23,7 @@ class CustomUserAdmin(UserAdmin):
     )
     search_fields = ('email','username')
     ordering =('email',)
-admin.site.register(Book,BookAdmin,CustomUser,CustomUserAdmin)
+admin.site.register(CustomUser,CustomUserAdmin,Book,BookAdmin)
 
 # Register your models here.
 
