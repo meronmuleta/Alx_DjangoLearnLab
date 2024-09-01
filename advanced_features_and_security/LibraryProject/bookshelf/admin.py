@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Book, ustomUser
+from .models import Book, CustomUser
 from django.contrib.auth.admin import UserAdmin
 
 class BookAdmin(admin.ModelAdmin):
