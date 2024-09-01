@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Books</title>
+</head>
+<body>
+    <h1>Books</h1>
+    {% if perms.books.can_create %}
+        <a href="{% url 'create_book' %}">Create a new book</a>
+    {% endif %}
+    <ul>
+        {% for book in books %}
+            <li>{{ book.title }} by {{ book.author }} ({{ book.publication_year }})
+                {% if perms.books.can_edit %}
+                    <a href="{% url 'edit_book' book.id %}">Edit</a>
+                {% endif %}
+                {% if perms.books.can_delete %}
+                    <form method="post" action="{% url 'delete_book' book.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
