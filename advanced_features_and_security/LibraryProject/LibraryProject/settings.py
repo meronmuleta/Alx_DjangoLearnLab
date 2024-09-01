@@ -31,12 +31,26 @@ X_FRAME_OPTIONS = 'DENY'  # Prevents embedding of the site in iframes from other
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Cookies over HTTPS only (make sure your local server is using HTTPS if you enable these)
-CSRF_COOKIE_SECURE = False  # Set to True in production
-SESSION_COOKIE_SECURE = False  # Set to True in production
+# Ensure session cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+
+# Ensure CSRF cookies are only sent over HTTPS
+CSRF_COOKIE_SECURE = True
 
 
 # Define a list of allowed hosts
 ALLOWED_HOSTS =  ['localhost', '127.0.0.1']
+
+
+# Redirect all non-HTTPS requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+SECURE_HSTS_SECONDS = 31536000  # 1 year in seconds
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True  # Apply HSTS to all subdomains
+SECURE_HSTS_PRELOAD = True  # Allow the site to be preloaded in browsers
+
+
 
 
 # Application definition
