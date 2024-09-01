@@ -23,9 +23,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8ku(x5a7$+n2rxs8-adsdsi_zd3^y6$_awm15l9=dtr_ee3t4g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+# Browser-side protections
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'  # Prevents embedding of the site in iframes from other domains
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Cookies over HTTPS only (make sure your local server is using HTTPS if you enable these)
+CSRF_COOKIE_SECURE = False  # Set to True in production
+SESSION_COOKIE_SECURE = False  # Set to True in production
+
+
+# Define a list of allowed hosts
+ALLOWED_HOSTS =  ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -49,7 +60,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
+
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", 'https://fonts.googleapis.com')
+CSP_FONT_SRC = ("'self'", 'https://fonts.gstatic.com')
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
