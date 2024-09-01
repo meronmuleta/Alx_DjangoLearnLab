@@ -25,8 +25,7 @@ class CustomUserAdmin(UserAdmin):
     ordering =('email',)
 
 
-
-admin.site.register(CustomUser,CustomUserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Book,BookAdmin)
 
 # Register your models here.
