@@ -4,8 +4,10 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework import generics
 from django_filters import rest_framework
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
 # List view for retrieving all books
-class ListView(ListAPIView):
+class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  # Read access for everyone, write access for authenticated users
@@ -22,13 +24,13 @@ class ListView(ListAPIView):
     ordering_fields = ['title', 'publication_year']  # Allows ordering by title and publication_year
 
 # Detail view for retrieving a single book by ID
-class DetailView(RetrieveAPIView):
+class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  # Read access for everyone, write access for authenticated users
 
 # Create view for adding a new book
-class CreateView(CreateAPIView):
+class CreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]  # Restricting to authenticated users
@@ -42,13 +44,13 @@ class CreateView(CreateAPIView):
         serializer.save()
 
 # Update view for modifying an existing book
-class UpdateView(UpdateAPIView):
+class UpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
 
 # Delete view for removing a book
-class DeleteView(DestroyAPIView):
+class DeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticated]
