@@ -11,7 +11,7 @@ class BookSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Publication year cannot be in the future.")
         return data
 class AuthorSerializer(serializers.ModelSerializer):
-    books = BookSerializer(many=True,read_only=True) #Nested serializer
+    books = BookSerializer(many=True, read_only=True) #Nested serializer
     class Meta:
         model=Author
         fields = ['id','name','books']
