@@ -1,7 +1,6 @@
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
-from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from .models import Book, Author
 
@@ -11,8 +10,9 @@ class BookAPITests(APITestCase):
         # Setting up a user and author
         self.user = User.objects.create_user(username='testuser', password='testpassword')
         self.author = Author.objects.create(name='John Doe')
-        self.token = Token.objects.create(user=self.user)
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.token.key)
+
+        # Log in the user
+        self.client.login(username='testuser', password='testpassword')
 
         # Setting up initial data
         self.book = Book.objects.create(title='Test Book', publication_year=2020, author=self.author)
