@@ -5,7 +5,7 @@ urlpatterns = [
     path('books/', ListView.as_view(), name='book-list'),  # List all books
     path('books/<int:pk>/', DetailView.as_view(), name='book-detail'),  # Retrieve a book by ID
     path('books/create/', CreateView.as_view(), name='book-create'),  # Add a new book
-    path('books/<int:pk>/update/', UpdateView.as_view(), name='book-update'),  # Update an existing book
-    path('books/<int:pk>/delete/', DeleteView.as_view(), name='book-delete'),  # Delete a book
+    path('books/update/', UpdateView.as_view(), name='book-update'),  # Update an existing book
+    path('books/delete/', DeleteView.as_view(), name='book-delete'),  # Delete a book
 ]
 
