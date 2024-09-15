@@ -8,6 +8,7 @@ from .forms import CustomUserCreationForm, CommentForm
 from django.views.generic import ListView,DetailView,CreateView,UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comment
+from django.db.models import Q
 # Create your views here.
 
 class RegisterView(CreateView):
@@ -33,6 +34,7 @@ class PostListView(ListView):
     context_object_name = 'posts'
     ordering = ['-date_posted']  # Order by latest posts
 
+ 
 # Detail View to show an individual post
 class PostDetailView(DetailView):
     model = Post
@@ -116,7 +118,17 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def get_success_url(self):
         return self.object.post.get_absolute_url()
 
+def search_posts(request):
+    query = request.GET.get('q')
+    results = Post.objects.none()
+    if query:
+        results = Post.objects.filter(
+            Q(title__icontains=query) | Q(content__icontains=query) | Q(tags__name__icontains=query)
+        ).distinct()
+    return render(request, 'blog/search_results.html', {'results': results, 'query': query})
 
-
+def posts_by_tag(request, tag_name):
+    posts = Post.objects.filter(tags__name__in=[tag_name])
+    return render(request, 'blog/post_list.html', {'posts': posts, 'tag': tag_name})
 
 
