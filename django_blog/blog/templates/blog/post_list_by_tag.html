@@ -1,0 +1,14 @@
+<!-- post_list_by_tag.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Posts tagged with "{{ tag.name }}"</h2>
+    <ul>
+        {% for post in object_list %}
+            <li>
+                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                <p>{{ post.content|slice:":200" }}...</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -9,6 +9,7 @@ from django.views.generic import ListView,DetailView,CreateView,UpdateView, Dele
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Post, Comment
 from django.db.models import Q
+from taggit.models import Tag
 # Create your views here.
 
 class RegisterView(CreateView):
@@ -127,8 +128,12 @@ def search_posts(request):
         ).distinct()
     return render(request, 'blog/search_results.html', {'results': results, 'query': query})
 
-def posts_by_tag(request, tag_name):
-    posts = Post.objects.filter(tags__name__in=[tag_name])
-    return render(request, 'blog/post_list.html', {'posts': posts, 'tag': tag_name})
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_list_by_tag.html'  # Specify the template for displaying posts by tag
 
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')  # Get the tag slug from the URL
+        tag = Tag.objects.get(slug=tag_slug)
+        return Post.objects.filter(tags__in=[tag])  # Filter posts by the tag
 
