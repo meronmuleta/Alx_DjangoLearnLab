@@ -37,6 +37,11 @@ class LoginView(APIView):
             return Response({'token': token.key}, status=status.HTTP_200_OK)
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
+class UserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
 class UserFollowView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
