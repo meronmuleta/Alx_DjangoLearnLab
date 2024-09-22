@@ -1,0 +1,6 @@
+{
+    "build": {
+      "start": "gunicorn social_media_api.wsgi:application"
+    }
+  }
+  
